@@ -21,7 +21,7 @@ use indexmap::{map::Entry, IndexMap};
 use matrix_sdk::deserialized_responses::EncryptionInfo;
 use ruma::{
     events::{
-        beacon,
+        beacon::unstable_start::UnstableBeaconStartEventContent,
         poll::{
             unstable_end::UnstablePollEndEventContent,
             unstable_response::UnstablePollResponseEventContent,
@@ -600,12 +600,12 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
 
     fn handle_beacon_start(
         &mut self,
-        beacon_info: NewUnstableBeaconStartEventContent,
+        beacon_info: UnstableBeaconStartEventContent,
         should_add: bool,
     ) {
         todo!("handle_beacon_start");
 
-        self.add(should_add, TimelineItemContent::Poll(poll_state));
+        // self.add(should_add, TimelineItemContent::Poll(poll_state));
 
         // let mut beacon_state = BeaconState::new(beacon_info);
 
@@ -614,8 +614,6 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
         //     // don't have an event ID that could be referenced by responses yet.
         //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
         // }
-
-
 
         // let mut poll_state = PollState::new(c);
         // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {

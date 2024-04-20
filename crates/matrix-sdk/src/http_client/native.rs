@@ -76,8 +76,8 @@ impl HttpClient {
                                         // TODO (mre): Clean this up and move to `ruma-client`
                                         let retry_after = match retry_after {
                                             Some(RetryAfter::Delay(duration)) => Some(duration),
-                                            Some(RetryAfter::DateTime(systemTime)) => Some(
-                                                systemTime
+                                            Some(RetryAfter::DateTime(system_time)) => Some(
+                                                system_time
                                                     .duration_since(SystemTime::now())
                                                     .unwrap_or_default(),
                                             ),
