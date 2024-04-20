@@ -582,6 +582,9 @@ impl Timeline {
             TimelineItemContent::Poll(poll_state) => AnyMessageLikeEventContent::UnstablePollStart(
                 UnstablePollStartEventContent::New(poll_state.into()),
             ),
+            TimelineItemContent::BeaconInfo(beacon_info) => {
+                AnyMessageLikeEventContent::BeaconInfo(beacon_info.content)
+            }
             TimelineItemContent::CallInvite => {
                 error_return!("Retrying call events is not currently supported");
             }

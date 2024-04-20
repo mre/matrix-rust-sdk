@@ -108,6 +108,10 @@ pub enum TimelineItemContent {
     /// An `m.poll.start` event.
     Poll(PollState),
 
+    /// TODO (mre): add beacon sharing event
+    /// An `m.beacon_info` event.
+    BeaconInfo(BeaconInfo),
+
     /// An `m.call.invite` event
     CallInvite,
 }
@@ -244,6 +248,7 @@ impl TimelineItemContent {
             TimelineItemContent::FailedToParseMessageLike { .. }
             | TimelineItemContent::FailedToParseState { .. } => "an event that couldn't be parsed",
             TimelineItemContent::Poll(_) => "a poll",
+            TimelineItemContent::BeaconInfo(_) => "a beacon info",
             TimelineItemContent::CallInvite => "a call invite",
         }
     }
@@ -323,6 +328,7 @@ impl TimelineItemContent {
             | Self::RedactedMessage
             | Self::Sticker(_)
             | Self::Poll(_)
+            | Self::BeaconInfo(_)
             | Self::CallInvite
             | Self::UnableToDecrypt(_) => Self::RedactedMessage,
             Self::MembershipChange(ev) => Self::MembershipChange(ev.redact(room_version)),
@@ -720,6 +726,11 @@ impl AnyOtherFullStateEventContent {
         }
     }
 }
+
+/// A beacon info state
+/// TODO (mre): Add remaining fields
+#[derive(Clone, Debug)]
+pub struct BeaconInfo {}
 
 /// A state event that doesn't have its own variant.
 #[derive(Clone, Debug)]

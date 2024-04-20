@@ -16,10 +16,12 @@ use std::sync::Arc;
 
 use as_variant::as_variant;
 use eyeball_im::{ObservableVectorTransaction, ObservableVectorTransactionEntry};
+use futures_util::stream::Any;
 use indexmap::{map::Entry, IndexMap};
 use matrix_sdk::deserialized_responses::EncryptionInfo;
 use ruma::{
     events::{
+        beacon,
         poll::{
             unstable_end::UnstablePollEndEventContent,
             unstable_response::UnstablePollResponseEventContent,
@@ -333,6 +335,16 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
                 AnyMessageLikeEventContent::Sticker(content) => {
                     self.add(should_add, TimelineItemContent::Sticker(Sticker { content }));
                 }
+
+                AnyMessageLikeEventContent::UnstableBeaconStart(beacon_info) => {
+                    // TODO (mre): Really this should be `beacon_info` here but right now we get a `beacon` event
+                    self.handle_beacon_start(beacon_info, should_add)
+                }
+
+                AnyMessageLikeEventContent::UnstableLocationStart(
+                    UnstableLocalStartEventContent::New(c),
+                ) => self.handle_location_start_edit(c.relates_to),
+
                 AnyMessageLikeEventContent::UnstablePollStart(
                     UnstablePollStartEventContent::Replacement(c),
                 ) => self.handle_poll_start_edit(c.relates_to),
@@ -584,6 +596,34 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
         if !found {
             debug!("Timeline item not found, discarding poll edit");
         }
+    }
+
+    fn handle_beacon_start(
+        &mut self,
+        beacon_info: NewUnstableBeaconStartEventContent,
+        should_add: bool,
+    ) {
+        todo!("handle_beacon_start");
+
+        self.add(should_add, TimelineItemContent::Poll(poll_state));
+
+        // let mut beacon_state = BeaconState::new(beacon_info);
+
+        // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {
+        //     // Applying the cache to remote events only because local echoes
+        //     // don't have an event ID that could be referenced by responses yet.
+        //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
+        // }
+
+
+
+        // let mut poll_state = PollState::new(c);
+        // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {
+        //     // Applying the cache to remote events only because local echoes
+        //     // don't have an event ID that could be referenced by responses yet.
+        //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
+        // }
+        // self.add(should_add, TimelineItemContent::Poll(poll_state));
     }
 
     fn handle_poll_start(&mut self, c: NewUnstablePollStartEventContent, should_add: bool) {

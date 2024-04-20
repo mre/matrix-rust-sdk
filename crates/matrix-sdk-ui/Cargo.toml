@@ -37,12 +37,19 @@ fuzzy-matcher = "0.3.7"
 imbl = { workspace = true, features = ["serde"] }
 indexmap = "2.0.0"
 itertools = { workspace = true }
-matrix-sdk = { workspace = true, features = ["experimental-oidc", "experimental-sliding-sync"] }
+matrix-sdk = { workspace = true, features = [
+    "experimental-oidc",
+    "experimental-sliding-sync",
+] }
 matrix-sdk-base = { workspace = true }
 mime = "0.3.16"
 once_cell = { workspace = true }
 pin-project-lite = "0.2.9"
-ruma = { workspace = true, features = ["html", "unstable-msc3381"] }
+ruma = { workspace = true, features = [
+    "html",
+    "unstable-msc3381",
+    "unstable-msc3489",
+] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

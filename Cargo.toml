@@ -39,7 +39,15 @@ futures-util = { version = "0.3.26", default-features = false, features = [
 http = "0.2.6"
 imbl = "2.0.0"
 itertools = "0.12.0"
-ruma = { git = "https://github.com/ruma/ruma", rev = "4c00bd010dbdca6005bd599b52e90a0b7015d056", features = [
+# ruma = { git = "https://github.com/torrybr/ruma", branch = "feat/live-location", features = [
+#     "client-api-c",
+#     "compat-upload-signatures",
+#     "compat-user-id",
+#     "compat-arbitrary-length-ids",
+#     "compat-tag-info",
+#     "unstable-msc3401",
+# ] }
+ruma = { path = "../ruma/crates/ruma", features = [
     "client-api-c",
     "compat-upload-signatures",
     "compat-user-id",
@@ -62,7 +70,7 @@ tracing = { version = "0.1.40", default-features = false, features = ["std"] }
 tracing-core = "0.1.32"
 uniffi = { git = "https://github.com/mozilla/uniffi-rs", rev = "789a9023b522562a95618443cee5a0d4f111c4c7" }
 uniffi_bindgen = { git = "https://github.com/mozilla/uniffi-rs", rev = "789a9023b522562a95618443cee5a0d4f111c4c7" }
-vodozemac = { git="https://github.com/matrix-org/vodozemac", rev = "0c75746fc8a5eda4a0e490d345d1798b4c6cbd67" }
+vodozemac = { git = "https://github.com/matrix-org/vodozemac", rev = "0c75746fc8a5eda4a0e490d345d1798b4c6cbd67" }
 wiremock = "0.5.21"
 zeroize = "1.6.0"
 

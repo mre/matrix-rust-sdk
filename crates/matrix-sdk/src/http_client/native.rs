@@ -16,7 +16,7 @@ use std::{
     fmt::Debug,
     mem,
     sync::atomic::{AtomicU64, Ordering},
-    time::Duration,
+    time::{Duration, SystemTime},
 };
 
 use backoff::{future::retry, Error as RetryError, ExponentialBackoff};
@@ -26,7 +26,7 @@ use eyeball::SharedObservable;
 use http::header::CONTENT_LENGTH;
 use reqwest::Certificate;
 use ruma::api::{
-    client::error::{ErrorBody as ClientApiErrorBody, ErrorKind as ClientApiErrorKind},
+    client::error::{ErrorBody as ClientApiErrorBody, ErrorKind as ClientApiErrorKind, RetryAfter},
     error::FromHttpResponseError,
     IncomingResponse, OutgoingRequest,
 };
@@ -68,13 +68,23 @@ impl HttpClient {
                             let status_code = match api_error {
                                 RumaApiError::ClientApi(e) => match e.body {
                                     ClientApiErrorBody::Standard {
-                                        kind: ClientApiErrorKind::LimitExceeded { retry_after_ms },
+                                        kind: ClientApiErrorKind::LimitExceeded { retry_after },
                                         ..
                                     } => {
-                                        return RetryError::Transient {
-                                            err,
-                                            retry_after: retry_after_ms,
+                                        // Convert `retry_after` to a `Duration` and return a transient error
+                                        // with the retry duration.
+                                        // TODO (mre): Clean this up and move to `ruma-client`
+                                        let retry_after = match retry_after {
+                                            Some(RetryAfter::Delay(duration)) => Some(duration),
+                                            Some(RetryAfter::DateTime(systemTime)) => Some(
+                                                systemTime
+                                                    .duration_since(SystemTime::now())
+                                                    .unwrap_or_default(),
+                                            ),
+                                            _ => None,
                                         };
+
+                                        return RetryError::Transient { err, retry_after };
                                     }
                                     _ => Some(e.status_code),
                                 },
