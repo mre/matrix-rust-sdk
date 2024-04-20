@@ -582,9 +582,12 @@ impl Timeline {
             TimelineItemContent::Poll(poll_state) => AnyMessageLikeEventContent::UnstablePollStart(
                 UnstablePollStartEventContent::New(poll_state.into()),
             ),
-            TimelineItemContent::BeaconInfo(beacon_info) => {
-                AnyMessageLikeEventContent::BeaconInfo(beacon_info.content)
+
+            // TODO (mre): Add beacon message handling here once we have support for it in ruma
+            TimelineItemContent::Beacon(beacon) => {
+                AnyMessageLikeEventContent::Beacon(beacon.content)
             }
+
             TimelineItemContent::CallInvite => {
                 error_return!("Retrying call events is not currently supported");
             }

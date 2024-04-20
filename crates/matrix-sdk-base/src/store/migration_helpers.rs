@@ -25,6 +25,7 @@ use ruma::{
     events::{
         room::{
             avatar::RoomAvatarEventContent,
+            beacon::BeaconInfoEventContent,
             canonical_alias::RoomCanonicalAliasEventContent,
             create::RoomCreateEventContent,
             encryption::RoomEncryptionEventContent,
@@ -148,6 +149,7 @@ fn encryption_state_default() -> bool {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct BaseRoomInfoV1 {
     avatar: Option<MinimalStateEvent<RoomAvatarEventContent>>,
+    beacons: BTreeMap<OwnedUserId, MinimalStateEvent<BeaconInfoEventContent>>,
     canonical_alias: Option<MinimalStateEvent<RoomCanonicalAliasEventContent>>,
     dm_targets: HashSet<OwnedUserId>,
     encryption: Option<RoomEncryptionEventContent>,
@@ -168,6 +170,7 @@ impl BaseRoomInfoV1 {
     ) -> Box<BaseRoomInfo> {
         let BaseRoomInfoV1 {
             avatar,
+            beacons,
             canonical_alias,
             dm_targets,
             encryption,
@@ -196,6 +199,7 @@ impl BaseRoomInfoV1 {
 
         Box::new(BaseRoomInfo {
             avatar,
+            beacons,
             canonical_alias,
             create,
             dm_targets,

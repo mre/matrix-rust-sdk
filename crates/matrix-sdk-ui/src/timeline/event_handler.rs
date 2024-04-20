@@ -21,7 +21,7 @@ use indexmap::{map::Entry, IndexMap};
 use matrix_sdk::deserialized_responses::EncryptionInfo;
 use ruma::{
     events::{
-        beacon::unstable_start::UnstableBeaconStartEventContent,
+        beacon::unstable_start::UnstableBeaconInfoEventContent,
         poll::{
             unstable_end::UnstablePollEndEventContent,
             unstable_response::UnstablePollResponseEventContent,
@@ -336,15 +336,10 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
                     self.add(should_add, TimelineItemContent::Sticker(Sticker { content }));
                 }
 
-                AnyMessageLikeEventContent::UnstableBeaconStart(beacon_info) => {
-                    // TODO (mre): Really this should be `beacon_info` here but right now we get a `beacon` event
-                    self.handle_beacon_start(beacon_info, should_add)
-                }
-
-                AnyMessageLikeEventContent::UnstableLocationStart(
-                    UnstableLocalStartEventContent::New(c),
-                ) => self.handle_location_start_edit(c.relates_to),
-
+                // TODO (mre): Add support for beacon messages here
+                // AnyMessageLikeEventContent::UnstableBeaconStart(beacon) => {
+                //     self.handle_beacon_start(beacon, should_add)
+                // }
                 AnyMessageLikeEventContent::UnstablePollStart(
                     UnstablePollStartEventContent::Replacement(c),
                 ) => self.handle_poll_start_edit(c.relates_to),

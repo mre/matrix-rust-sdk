@@ -15,6 +15,7 @@ pub use normal::{Room, RoomInfo, RoomInfoUpdate, RoomState, RoomStateFilter};
 use ruma::{
     assign,
     events::{
+        beacon::unstable_start::BeaconInfoEventContent,
         call::member::CallMemberEventContent,
         macros::EventContent,
         room::{
@@ -78,6 +79,9 @@ impl fmt::Display for DisplayName {
 pub struct BaseRoomInfo {
     /// The avatar URL of this room.
     pub(crate) avatar: Option<MinimalStateEvent<RoomAvatarEventContent>>,
+    /// Active beacon info state in this room.
+    #[serde(skip_serializing_if = "BTreeMap::is_empty", default)]
+    pub(crate) beacons: BTreeMap<OwnedUserId, MinimalStateEvent<BeaconInfoEventContent>>,
     /// The canonical alias of this room.
     pub(crate) canonical_alias: Option<MinimalStateEvent<RoomCanonicalAliasEventContent>>,
     /// The `m.room.create` event content of this room.
@@ -157,6 +161,9 @@ impl BaseRoomInfo {
             }
             AnySyncStateEvent::RoomAvatar(a) => {
                 self.avatar = Some(a.into());
+            }
+            AnySyncStateEvent::BeaconInfo(b) => {
+                self.beacons.insert(b.state_key().clone(), b.into());
             }
             AnySyncStateEvent::RoomName(n) => {
                 self.name = Some(n.into());
@@ -345,6 +352,7 @@ impl Default for BaseRoomInfo {
     fn default() -> Self {
         Self {
             avatar: None,
+            beacons: BTreeMap::new(),
             canonical_alias: None,
             create: None,
             dm_targets: Default::default(),
