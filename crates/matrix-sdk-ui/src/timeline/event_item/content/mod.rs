@@ -327,7 +327,7 @@ impl TimelineItemContent {
             | Self::RedactedMessage
             | Self::Sticker(_)
             | Self::Poll(_)
-            | Self::BeaconInfo(_)
+            | Self::Beacon(_)
             | Self::CallInvite
             | Self::UnableToDecrypt(_) => Self::RedactedMessage,
             Self::MembershipChange(ev) => Self::MembershipChange(ev.redact(room_version)),

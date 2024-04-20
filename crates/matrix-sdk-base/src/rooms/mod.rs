@@ -15,11 +15,13 @@ pub use normal::{Room, RoomInfo, RoomInfoUpdate, RoomState, RoomStateFilter};
 use ruma::{
     assign,
     events::{
-        beacon::unstable_start::BeaconInfoEventContent,
+        // TODO (mre): maybe call it `beacon::share::BeaconEventContent`?
+        // beacon::unstable_start::BeaconInfoEventContent,
         call::member::CallMemberEventContent,
         macros::EventContent,
         room::{
             avatar::RoomAvatarEventContent,
+            beacon::BeaconInfoEventContent,
             canonical_alias::RoomCanonicalAliasEventContent,
             create::{PreviousRoom, RoomCreateEventContent},
             encryption::RoomEncryptionEventContent,
@@ -32,8 +34,13 @@ use ruma::{
             topic::RoomTopicEventContent,
         },
         tag::{TagName, Tags},
-        AnyStrippedStateEvent, AnySyncStateEvent, EmptyStateKey, RedactContent,
-        RedactedStateEventContent, StaticStateEventContent, SyncStateEvent,
+        AnyStrippedStateEvent,
+        AnySyncStateEvent,
+        EmptyStateKey,
+        RedactContent,
+        RedactedStateEventContent,
+        StaticStateEventContent,
+        SyncStateEvent,
     },
     room::RoomType,
     EventId, OwnedUserId, RoomVersionId,

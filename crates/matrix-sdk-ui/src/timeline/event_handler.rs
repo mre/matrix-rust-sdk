@@ -21,7 +21,8 @@ use indexmap::{map::Entry, IndexMap};
 use matrix_sdk::deserialized_responses::EncryptionInfo;
 use ruma::{
     events::{
-        beacon::unstable_start::UnstableBeaconInfoEventContent,
+        // TODO (mre): Call this beacon::share::UnstableBeaconEventContent
+        // beacon::unstable_start::UnstableBeaconInfoEventContent,
         poll::{
             unstable_end::UnstablePollEndEventContent,
             unstable_response::UnstablePollResponseEventContent,
@@ -37,9 +38,16 @@ use ruma::{
             member::RoomMemberEventContent,
             message::{self, RoomMessageEventContent, RoomMessageEventContentWithoutRelation},
         },
-        AnyMessageLikeEventContent, AnySyncMessageLikeEvent, AnySyncStateEvent,
-        AnySyncTimelineEvent, BundledMessageLikeRelations, EventContent, FullStateEventContent,
-        MessageLikeEventType, StateEventType, SyncStateEvent,
+        AnyMessageLikeEventContent,
+        AnySyncMessageLikeEvent,
+        AnySyncStateEvent,
+        AnySyncTimelineEvent,
+        BundledMessageLikeRelations,
+        EventContent,
+        FullStateEventContent,
+        MessageLikeEventType,
+        StateEventType,
+        SyncStateEvent,
     },
     html::RemoveReplyFallback,
     serde::Raw,
@@ -338,7 +346,7 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
 
                 // TODO (mre): Add support for beacon messages here
                 // AnyMessageLikeEventContent::UnstableBeaconStart(beacon) => {
-                //     self.handle_beacon_start(beacon, should_add)
+                //     self.handle_beacon_share(beacon, should_add)
                 // }
                 AnyMessageLikeEventContent::UnstablePollStart(
                     UnstablePollStartEventContent::Replacement(c),
@@ -593,31 +601,31 @@ impl<'a, 'o> TimelineEventHandler<'a, 'o> {
         }
     }
 
-    fn handle_beacon_start(
-        &mut self,
-        beacon_info: UnstableBeaconStartEventContent,
-        should_add: bool,
-    ) {
-        todo!("handle_beacon_start");
+    // fn handle_beacon_share(
+    //     &mut self,
+    //     beacon_info: UnstableBeaconStartEventContent,
+    //     should_add: bool,
+    // ) {
+    //     todo!("handle_beacon_share");
 
-        // self.add(should_add, TimelineItemContent::Poll(poll_state));
+    //     // self.add(should_add, TimelineItemContent::Poll(poll_state));
 
-        // let mut beacon_state = BeaconState::new(beacon_info);
+    //     // let mut beacon_state = BeaconState::new(beacon_info);
 
-        // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {
-        //     // Applying the cache to remote events only because local echoes
-        //     // don't have an event ID that could be referenced by responses yet.
-        //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
-        // }
+    //     // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {
+    //     //     // Applying the cache to remote events only because local echoes
+    //     //     // don't have an event ID that could be referenced by responses yet.
+    //     //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
+    //     // }
 
-        // let mut poll_state = PollState::new(c);
-        // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {
-        //     // Applying the cache to remote events only because local echoes
-        //     // don't have an event ID that could be referenced by responses yet.
-        //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
-        // }
-        // self.add(should_add, TimelineItemContent::Poll(poll_state));
-    }
+    //     // let mut poll_state = PollState::new(c);
+    //     // if let Flow::Remote { event_id, .. } = self.ctx.flow.clone() {
+    //     //     // Applying the cache to remote events only because local echoes
+    //     //     // don't have an event ID that could be referenced by responses yet.
+    //     //     self.meta.poll_pending_events.apply(&event_id, &mut poll_state);
+    //     // }
+    //     // self.add(should_add, TimelineItemContent::Poll(poll_state));
+    // }
 
     fn handle_poll_start(&mut self, c: NewUnstablePollStartEventContent, should_add: bool) {
         let mut poll_state = PollState::new(c);

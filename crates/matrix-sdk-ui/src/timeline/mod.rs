@@ -585,7 +585,8 @@ impl Timeline {
 
             // TODO (mre): Add beacon message handling here once we have support for it in ruma
             TimelineItemContent::Beacon(beacon) => {
-                AnyMessageLikeEventContent::Beacon(beacon.content)
+                todo!()
+                // AnyMessageLikeEventContent::Beacon(beacon.content)
             }
 
             TimelineItemContent::CallInvite => {
